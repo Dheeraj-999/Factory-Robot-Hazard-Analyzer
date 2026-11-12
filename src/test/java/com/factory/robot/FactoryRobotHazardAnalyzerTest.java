@@ -32,10 +32,11 @@ class FactoryRobotHazardAnalyzerTest {
         assertTrue(result.contains("Arm Precision: 0.5"));
         assertTrue(result.contains("Worker Density: 10"));
         assertTrue(result.contains("Machinery State: Critical"));
+        assertTrue(result.contains("Robot Hazard Risk Score: 37.5"));
     }
 
     @Test
-    void shouldCalculateCorrectHazardRisk() {
+    void shouldCalculateCorrectHazardRisk() throws RobotSafetyException {
         double result = FactoryRobotHazardAnalyzer
                 .calculateHazardRisk(0.5, 10, "Critical");
 
@@ -43,7 +44,7 @@ class FactoryRobotHazardAnalyzerTest {
     }
 
     @Test
-    void shouldCalculateRiskForWornMachinery() {
+    void shouldCalculateRiskForWornMachinery() throws RobotSafetyException {
         double result = FactoryRobotHazardAnalyzer
                 .calculateHazardRisk(0.5, 10, "Worn");
 
@@ -51,7 +52,7 @@ class FactoryRobotHazardAnalyzerTest {
     }
 
     @Test
-    void shouldCalculateRiskForFaultyMachinery() {
+    void shouldCalculateRiskForFaultyMachinery() throws RobotSafetyException {
         double result = FactoryRobotHazardAnalyzer
                 .calculateHazardRisk(0.5, 10, "Faulty");
 
@@ -59,18 +60,16 @@ class FactoryRobotHazardAnalyzerTest {
     }
 
     @Test
-    void shouldRejectInvalidArmPrecision() {
-        double result = FactoryRobotHazardAnalyzer
-                .calculateHazardRisk(1.5, 10, "Critical");
-
-        assertEquals(-1, result);
+    void shouldThrowExceptionForInvalidArmPrecision() {
+        assertThrows(RobotSafetyException.class, () ->
+                FactoryRobotHazardAnalyzer
+                        .calculateHazardRisk(1.5, 10, "Critical"));
     }
 
     @Test
-    void shouldRejectInvalidWorkerDensity() {
-        double result = FactoryRobotHazardAnalyzer
-                .calculateHazardRisk(0.5, 25, "Critical");
-
-        assertEquals(-1, result);
+    void shouldThrowExceptionForInvalidWorkerDensity() {
+        assertThrows(RobotSafetyException.class, () ->
+                FactoryRobotHazardAnalyzer
+                        .calculateHazardRisk(0.5, 25, "Critical"));
     }
 }
