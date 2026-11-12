@@ -2,38 +2,42 @@
 package com.factory.robot;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.io.*;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FactoryRobotHazardAnalyzerTest {
 
     @Test
-    void shouldDisplayStaticHazardMessage() {
+    void shouldAcceptAndDisplayRobotInputs() {
 
-        // Capture console output
+        String simulatedInput = "0.5\n10\nCritical\n";
+
+        InputStream originalInput = System.in;
+        PrintStream originalOutput = System.out;
+
         ByteArrayOutputStream output =
                 new ByteArrayOutputStream();
 
-        PrintStream originalOutput = System.out;
-
         try {
+            System.setIn(new ByteArrayInputStream(
+                    simulatedInput.getBytes()
+            ));
+
             System.setOut(new PrintStream(output));
 
-            // Execute main method
             FactoryRobotHazardAnalyzer.main(new String[]{});
 
         } finally {
+            System.setIn(originalInput);
             System.setOut(originalOutput);
         }
 
-        // Verify expected output
-        assertEquals(
-                "Factory Robot Hazard Analyzer"
-                        + System.lineSeparator(),
-                output.toString()
-        );
+        String result = output.toString();
+
+        assertTrue(result.contains("Arm Precision: 0.5"));
+        assertTrue(result.contains("Worker Density: 10"));
+        assertTrue(result.contains("Machinery State: Critical"));
     }
 }
