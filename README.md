@@ -1,6 +1,5 @@
 # Factory-Robot-Hazard-Analyzer
 
-# Factory Robot Hazard Analyzer
 
 ## 1. Introduction
 
