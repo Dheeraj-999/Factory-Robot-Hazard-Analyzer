@@ -72,4 +72,25 @@ class FactoryRobotHazardAnalyzerTest {
                 FactoryRobotHazardAnalyzer
                         .calculateHazardRisk(0.5, 25, "Critical"));
     }
+
+    @Test
+    void shouldThrowExceptionForUnsupportedMachineryState() {
+        RobotSafetyException exception = assertThrows(
+                RobotSafetyException.class,
+                () -> FactoryRobotHazardAnalyzer
+                        .calculateHazardRisk(0.5, 10, "Normal")
+        );
+
+        assertEquals(
+                "Invalid Machinery State! Use Worn, Faulty, or Critical.",
+                exception.getMessage()
+        );
+    }
+
+    @Test
+    void shouldRejectLowercaseMachineryState() {
+        assertThrows(RobotSafetyException.class, () ->
+                FactoryRobotHazardAnalyzer
+                        .calculateHazardRisk(0.5, 10, "worn"));
+    }
 }

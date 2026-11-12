@@ -22,8 +22,8 @@ public class FactoryRobotHazardAnalyzer {
                     "Invalid Worker Density! Enter a value between 1 and 20.");
         }
 
-        // Calculate Machinery Risk Factor
-        double machineRiskFactor = 0.0;
+        // Map Machinery State to Risk Factor
+        double machineRiskFactor;
 
         if (machineryState.equals("Worn")) {
             machineRiskFactor = 1.3;
@@ -31,6 +31,9 @@ public class FactoryRobotHazardAnalyzer {
             machineRiskFactor = 2.0;
         } else if (machineryState.equals("Critical")) {
             machineRiskFactor = 3.0;
+        } else {
+            throw new RobotSafetyException(
+                    "Invalid Machinery State! Use Worn, Faulty, or Critical.");
         }
 
         // Calculate Hazard Risk
