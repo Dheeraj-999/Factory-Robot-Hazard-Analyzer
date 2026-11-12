@@ -5,48 +5,11 @@ import java.util.Scanner;
 
 public class FactoryRobotHazardAnalyzer {
 
-    public static double calculateHazardRisk(
-            double armPrecision,
-            int workerDensity,
-            String machineryState) throws RobotSafetyException {
-
-        // Validate Arm Precision
-        if (armPrecision < 0.0 || armPrecision > 1.0) {
-            throw new RobotSafetyException(
-                    "Invalid Arm Precision! Enter a value between 0.0 and 1.0.");
-        }
-
-        // Validate Worker Density
-        if (workerDensity < 1 || workerDensity > 20) {
-            throw new RobotSafetyException(
-                    "Invalid Worker Density! Enter a value between 1 and 20.");
-        }
-
-        // Map Machinery State to Risk Factor
-        double machineRiskFactor;
-
-        if (machineryState.equals("Worn")) {
-            machineRiskFactor = 1.3;
-        } else if (machineryState.equals("Faulty")) {
-            machineRiskFactor = 2.0;
-        } else if (machineryState.equals("Critical")) {
-            machineRiskFactor = 3.0;
-        } else {
-            throw new RobotSafetyException(
-                    "Invalid Machinery State! Use Worn, Faulty, or Critical.");
-        }
-
-        // Calculate Hazard Risk
-        double risk = ((1.0 - armPrecision) * 15.0)
-                + (workerDensity * machineRiskFactor);
-
-        return risk;
-    }
-
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
 
+        // Collect user inputs
         System.out.println("Enter Arm Precision (0.0 - 1.0):");
         double armPrecision = sc.nextDouble();
 
@@ -58,10 +21,15 @@ public class FactoryRobotHazardAnalyzer {
         System.out.println("Enter Machinery State (Worn/Faulty/Critical):");
         String machineryState = sc.nextLine();
 
+        // Create auditor object
+        RobotHazardAuditor auditor = new RobotHazardAuditor();
+
         try {
-            double risk = calculateHazardRisk(
+            // Call business logic
+            double risk = auditor.calculateHazardRisk(
                     armPrecision, workerDensity, machineryState);
 
+            // Display result
             System.out.println("Arm Precision: " + armPrecision);
             System.out.println("Worker Density: " + workerDensity);
             System.out.println("Machinery State: " + machineryState);

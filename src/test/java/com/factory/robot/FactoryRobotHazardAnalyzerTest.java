@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FactoryRobotHazardAnalyzerTest {
 
+    private final RobotHazardAuditor auditor = new RobotHazardAuditor();
+
     @Test
     void shouldAcceptAndDisplayRobotInputs() {
         String simulatedInput = "0.5\n10\nCritical\n";
@@ -37,24 +39,21 @@ class FactoryRobotHazardAnalyzerTest {
 
     @Test
     void shouldCalculateCorrectHazardRisk() throws RobotSafetyException {
-        double result = FactoryRobotHazardAnalyzer
-                .calculateHazardRisk(0.5, 10, "Critical");
+        double result = auditor.calculateHazardRisk(0.5, 10, "Critical");
 
         assertEquals(37.5, result, 0.001);
     }
 
     @Test
     void shouldCalculateRiskForWornMachinery() throws RobotSafetyException {
-        double result = FactoryRobotHazardAnalyzer
-                .calculateHazardRisk(0.5, 10, "Worn");
+        double result = auditor.calculateHazardRisk(0.5, 10, "Worn");
 
         assertEquals(20.5, result, 0.001);
     }
 
     @Test
     void shouldCalculateRiskForFaultyMachinery() throws RobotSafetyException {
-        double result = FactoryRobotHazardAnalyzer
-                .calculateHazardRisk(0.5, 10, "Faulty");
+        double result = auditor.calculateHazardRisk(0.5, 10, "Faulty");
 
         assertEquals(27.5, result, 0.001);
     }
@@ -62,23 +61,20 @@ class FactoryRobotHazardAnalyzerTest {
     @Test
     void shouldThrowExceptionForInvalidArmPrecision() {
         assertThrows(RobotSafetyException.class, () ->
-                FactoryRobotHazardAnalyzer
-                        .calculateHazardRisk(1.5, 10, "Critical"));
+                auditor.calculateHazardRisk(1.5, 10, "Critical"));
     }
 
     @Test
     void shouldThrowExceptionForInvalidWorkerDensity() {
         assertThrows(RobotSafetyException.class, () ->
-                FactoryRobotHazardAnalyzer
-                        .calculateHazardRisk(0.5, 25, "Critical"));
+                auditor.calculateHazardRisk(0.5, 25, "Critical"));
     }
 
     @Test
     void shouldThrowExceptionForUnsupportedMachineryState() {
         RobotSafetyException exception = assertThrows(
                 RobotSafetyException.class,
-                () -> FactoryRobotHazardAnalyzer
-                        .calculateHazardRisk(0.5, 10, "Normal")
+                () -> auditor.calculateHazardRisk(0.5, 10, "Normal")
         );
 
         assertEquals(
@@ -90,7 +86,6 @@ class FactoryRobotHazardAnalyzerTest {
     @Test
     void shouldRejectLowercaseMachineryState() {
         assertThrows(RobotSafetyException.class, () ->
-                FactoryRobotHazardAnalyzer
-                        .calculateHazardRisk(0.5, 10, "worn"));
+                auditor.calculateHazardRisk(0.5, 10, "worn"));
     }
 }
