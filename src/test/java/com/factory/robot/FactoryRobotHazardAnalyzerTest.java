@@ -76,4 +76,35 @@ class FactoryRobotHazardAnalyzerTest {
 
         assertEquals(27.5, result, 0.001);
     }
+
+    // UC4: Test invalid arm precision
+    @Test
+    void shouldRejectInvalidArmPrecision() {
+
+        String simulatedInput = "1.5\n10\nCritical\n";
+
+        InputStream originalInput = System.in;
+        PrintStream originalOutput = System.out;
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        try {
+            System.setIn(new ByteArrayInputStream(
+                    simulatedInput.getBytes()
+            ));
+
+            System.setOut(new PrintStream(output));
+
+            FactoryRobotHazardAnalyzer.main(new String[]{});
+
+        } finally {
+            System.setIn(originalInput);
+            System.setOut(originalOutput);
+        }
+
+        String result = output.toString();
+
+        assertTrue(result.contains("Error: Invalid Arm Precision!"));
+        assertFalse(result.contains("Robot Hazard Risk Score:"));
+    }
 }

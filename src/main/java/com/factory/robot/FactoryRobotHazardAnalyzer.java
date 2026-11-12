@@ -42,12 +42,24 @@ public class FactoryRobotHazardAnalyzer {
         System.out.println("Enter Machinery State (Worn/Faulty/Critical):");
         String machineryState = sc.nextLine();
 
-        // UC1 + UC2: Display accepted inputs
+        // UC4: Validate inputs using conditional statements
+
+        if (armPrecision < 0.0 || armPrecision > 1.0) {
+            System.out.println("Error: Invalid Arm Precision!");
+            sc.close();
+            return;
+        } else if (workerDensity < 1 || workerDensity > 20) {
+            System.out.println("Error: Invalid Worker Density!");
+            sc.close();
+            return;
+        }
+
+        // Display valid inputs
         System.out.println("Arm Precision: " + armPrecision);
         System.out.println("Worker Density: " + workerDensity);
         System.out.println("Machinery State: " + machineryState);
 
-        // UC3: Calculate hazard risk
+        // Calculate risk
         double risk = calculateHazardRisk(
                 armPrecision,
                 workerDensity,
