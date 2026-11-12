@@ -5,12 +5,24 @@ import java.util.Scanner;
 
 public class FactoryRobotHazardAnalyzer {
 
-    // UC3: Calculate hazard risk
     public static double calculateHazardRisk(
             double armPrecision,
             int workerDensity,
             String machineryState) {
 
+        // Validate Arm Precision
+        if (armPrecision < 0.0 || armPrecision > 1.0) {
+            System.out.println("Error: Invalid Arm Precision!");
+            return -1;
+        }
+
+        // Validate Worker Density
+        if (workerDensity < 1 || workerDensity > 20) {
+            System.out.println("Error: Invalid Worker Density!");
+            return -1;
+        }
+
+        // Calculate Machinery Risk Factor
         double machineRiskFactor = 0.0;
 
         if (machineryState.equals("Worn")) {
@@ -21,6 +33,7 @@ public class FactoryRobotHazardAnalyzer {
             machineRiskFactor = 3.0;
         }
 
+        // Calculate Hazard Risk
         double risk = ((1.0 - armPrecision) * 15.0)
                 + (workerDensity * machineRiskFactor);
 
@@ -42,31 +55,17 @@ public class FactoryRobotHazardAnalyzer {
         System.out.println("Enter Machinery State (Worn/Faulty/Critical):");
         String machineryState = sc.nextLine();
 
-        // UC4: Validate inputs using conditional statements
-
-        if (armPrecision < 0.0 || armPrecision > 1.0) {
-            System.out.println("Error: Invalid Arm Precision!");
-            sc.close();
-            return;
-        } else if (workerDensity < 1 || workerDensity > 20) {
-            System.out.println("Error: Invalid Worker Density!");
-            sc.close();
-            return;
-        }
-
-        // Display valid inputs
-        System.out.println("Arm Precision: " + armPrecision);
-        System.out.println("Worker Density: " + workerDensity);
-        System.out.println("Machinery State: " + machineryState);
-
-        // Calculate risk
+        // Call the calculation and validation method
         double risk = calculateHazardRisk(
-                armPrecision,
-                workerDensity,
-                machineryState
-        );
+                armPrecision, workerDensity, machineryState);
 
-        System.out.println("Robot Hazard Risk Score: " + risk);
+        // Display result only if inputs are valid
+        if (risk != -1) {
+            System.out.println("Arm Precision: " + armPrecision);
+            System.out.println("Worker Density: " + workerDensity);
+            System.out.println("Machinery State: " + machineryState);
+            System.out.println("Robot Hazard Risk Score: " + risk);
+        }
 
         sc.close();
     }
