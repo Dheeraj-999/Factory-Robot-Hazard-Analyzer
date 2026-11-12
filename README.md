@@ -32,8 +32,6 @@ By considering these factors, the application calculates a numerical risk score.
 
 The main purpose of this project is to demonstrate how a simple Java program can collect information, validate it, process it, and handle incorrect inputs safely.
 
-> Note: This is an educational hazard-analysis application. Its calculated score is a simplified model, not a certified industrial safety assessment.
-
 ---
 
 ## 3. Project Objectives
