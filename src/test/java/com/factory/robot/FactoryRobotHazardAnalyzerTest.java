@@ -5,10 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FactoryRobotHazardAnalyzerTest {
 
+    // UC1 + UC2: Test input acceptance and display
     @Test
     void shouldAcceptAndDisplayRobotInputs() {
 
@@ -17,8 +18,7 @@ class FactoryRobotHazardAnalyzerTest {
         InputStream originalInput = System.in;
         PrintStream originalOutput = System.out;
 
-        ByteArrayOutputStream output =
-                new ByteArrayOutputStream();
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         try {
             System.setIn(new ByteArrayInputStream(
@@ -39,5 +39,41 @@ class FactoryRobotHazardAnalyzerTest {
         assertTrue(result.contains("Arm Precision: 0.5"));
         assertTrue(result.contains("Worker Density: 10"));
         assertTrue(result.contains("Machinery State: Critical"));
+    }
+
+    // UC3: Test Critical machinery
+    @Test
+    void shouldCalculateCorrectHazardRisk() {
+
+        double result =
+                FactoryRobotHazardAnalyzer.calculateHazardRisk(
+                        0.5, 10, "Critical"
+                );
+
+        assertEquals(37.5, result, 0.001);
+    }
+
+    // UC3: Test Worn machinery
+    @Test
+    void shouldCalculateRiskForWornMachinery() {
+
+        double result =
+                FactoryRobotHazardAnalyzer.calculateHazardRisk(
+                        0.5, 10, "Worn"
+                );
+
+        assertEquals(20.5, result, 0.001);
+    }
+
+    // UC3: Test Faulty machinery
+    @Test
+    void shouldCalculateRiskForFaultyMachinery() {
+
+        double result =
+                FactoryRobotHazardAnalyzer.calculateHazardRisk(
+                        0.5, 10, "Faulty"
+                );
+
+        assertEquals(27.5, result, 0.001);
     }
 }
